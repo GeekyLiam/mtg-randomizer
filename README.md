@@ -1,1 +1,1 @@
-# mtg-randomizer-website
+# mtg-randomizer
