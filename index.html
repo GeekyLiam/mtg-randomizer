@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TopDeck</title>
+    <title>Random Commander</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
-    <h1>TEST</h1>
-    <p>test para</p>
-    <script>
-        fetch('https://api.scryfall.com/cards/random')
-            .then(response => response.json())
-            .then(data => {
-                const img = document.createElement('img');
-                img.src = data.image_uris.normal;
-                document.body.appendChild(img);
-            });
-    </script>
+    
+    <div id="particles-js"></div>
+
+    <div id="cardContainer"></div>
+
+    <div id="buttonContainer">
+        <button onclick="displayCard()">Random Card</button>
+    </div>
+
+    <script src="js/main.js"></script>
 
 </body>
 </html>
