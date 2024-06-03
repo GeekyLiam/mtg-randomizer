@@ -1,1 +1,1 @@
-# topdeck-website
+# mtg-randomizer-website
