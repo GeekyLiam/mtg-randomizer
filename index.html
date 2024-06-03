@@ -1,1 +1,20 @@
-<h1>Hello!</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TopDeck</title>
+</head>
+<body>
+    <h1>TEST</h1>
+    <p>test para</p>
+    <script>
+        fetch('https://api.scryfall.com/cards/random')
+            .then(response => response.json())
+            .then(data => {
+                const img = document.createElement('img');
+                img.src = data.image_uris.normal;
+                document.body.appendChild(img);
+            });
+    </script>
+
+</body>
+</html>
