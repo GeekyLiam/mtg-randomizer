@@ -1,50 +1,72 @@
-function displayCard() {
-    fetch(`https://api.scryfall.com/cards/random?q=is%3Acommander`)
-        .then(response => response.json())
-        .then(data => {
-            let img = document.getElementById('cardImage');
-            if (!img) {
-                img = document.createElement('img');
-                img.id = 'cardImage';
-                document.getElementById('cardContainer').appendChild(img);
-            }
-            img.src = data.image_uris.normal;
+// Fetch and display a random card
+async function displayCard() {
+  spinner.style.display = 'block'; // Show the spinner
 
-            // Add event listeners after the image is created
-            const cardContainer = document.querySelector('#cardContainer');
+  try {
+      const response = await fetch(`https://api.scryfall.com/cards/random?q=is%3Acommander`);
+      const data = await response.json();
 
-            cardContainer.addEventListener('mousemove', (e) => {
-                let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-                let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-                img.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-            });
+      let img = document.getElementById('cardImage');
+      if (!img) {
+          img = createImageElement();
+      }
+      img.src = data.image_uris.normal;
+      img.style.opacity = '0'; // Initially hide the image
 
-            cardContainer.addEventListener('mouseleave', (e) => {
-                img.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            });
-        });
+      const cardContainer = document.querySelector('#cardContainer');
+      addCardEventListeners(cardContainer, img);
+
+      // Add event listener to the button
+      const button = document.querySelector('#buttonContainer button');
+      button.addEventListener('click', () => {
+          img.style.opacity = '0';
+      });
+
+      // Fade in the image
+      setTimeout(() => {
+          img.style.opacity = '1';
+      }, 100); // Delay to allow for image loading
+  } catch (error) {
+      console.error('Failed to fetch card:', error);
+  } finally {
+      spinner.style.display = 'none'; // Hide the spinner
+  }
 }
 
 document.addEventListener('DOMContentLoaded', displayCard);
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    const cardContainer = document.querySelector('#cardContainer');
-    const cardImage = document.querySelector('#cardImage');
+// Create an image element and append it to the card container
+function createImageElement() {
+  const img = document.createElement('img');
+  img.id = 'cardImage';
+  img.style.transform = 'rotateY(0deg) rotateX(0deg)';
+  img.style.imageRendering = 'auto';
+  document.getElementById('cardContainer').appendChild(img);
+  return img;
+}
 
-    cardContainer.addEventListener('mousemove', (e) => {
-        let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-        let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-        cardImage.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-    });
+// Add mousemove and mouseleave event listeners to the card
+function addCardEventListeners(cardContainer, img) {
+  cardContainer.addEventListener('mousemove', (e) => {
+      const xAxis = -(window.innerWidth / 2 - e.pageX) / 25;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+      img.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+  });
 
-    cardContainer.addEventListener('mouseleave', (e) => {
-        cardImage.style.transform = `rotateY(0deg) rotateX(0deg)`;
-    });
-});
+  cardContainer.addEventListener('mouseleave', () => {
+      img.style.transform = 'rotateY(0deg) rotateX(0deg)';
+  });
+}
 
-particlesJS('particles-js',
-  
-{
+// Create a spinner element
+const spinner = document.createElement('div');
+spinner.className = 'spinner';
+document.body.appendChild(spinner);
+
+document.addEventListener('DOMContentLoaded', displayCard);
+
+// ParticleJS configuration
+const particleConfig = {
   "particles": {
     "number": {
       "value": 80,
@@ -138,5 +160,6 @@ particlesJS('particles-js',
     }
   },
   "retina_detect": true
-}
-);
+};
+
+particlesJS('particles-js', particleConfig);
